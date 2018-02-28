@@ -1,0 +1,18 @@
+<h2>Show Relationship</h2>
+
+<ul>
+  <li>
+    <strong>Manager:</strong>
+    <%= @employee.manager.name %>
+  </li>
+
+  <li>
+    <strong>Underling:</strong>
+    <%= @employee.underling.name %>
+  </li>
+</ul>
+
+<div class="topnav">
+  <span><%= link "Edit", to: employee_path(@conn, :edit, @employee) %></span>
+  <span><%= link "Add New Relationship", to: employee_path(@conn, :new) %></span>
+</div>

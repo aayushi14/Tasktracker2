@@ -1,0 +1,68 @@
+<%= form_for @conn, time_path(@conn, :create), [as: :time], fn f -> %>
+  <%= if @changeset.action do %>
+    <div class="alert alert-danger">
+      <p>Oops, something went wrong! Please check the errors below.</p>
+    </div>
+  <% end %>
+
+  <%= if (@task.assignedBy.id == @current_user.id) do %>
+    <div class="form-group">
+      <%= label f, :title, class: "control-label" %>
+      <%= text_input f, :title, class: "form-control" %>
+      <%= error_tag f, :title %>
+    </div>
+
+    <div class="form-group">
+      <%= label f, :description, class: "control-label" %>
+      <%= textarea f, :description, class: "form-control" %>
+      <%= error_tag f, :description %>
+    </div>
+
+    <div class="form-group">
+      <%= label f, "Assigned by: ", class: "control-label" %>
+      <%= text_input f, :assignedBy_id, value: @task.assignedBy.name, class: "form-control", disabled: "true" %>
+      <%= error_tag f, :assignedBy_id %>
+    </div>
+
+    <div class="form-group">
+      <%= label f, "Assigned to: ", class: "control-label" %>
+      <%= if (@task.assignedBy.id == @current_user.id) do %>
+      <%= select f, :assignedTo_id, underlings = Tasktracker.Accounts.get_myUnderlings(@current_user.id), class: "form-control" %>
+      <% else %>
+      <%= text_input f, :assignedTo_id, value: @task.assignedTo.name, class: "form-control", disabled: "true" %>
+      <% end %>
+      <%= error_tag f, :assignedTo_id %>
+    </div>
+    <div class="form-group">
+      <%= submit "Submit", class: "btn btn-primary" %>
+      <%= link "Cancel", to: task_path(@conn, :index) %>
+    </div>
+
+  <% else %>
+    <div class="form-group">
+      <%= label f, :status, class: "control-label" %>
+      <%= checkbox f, :status, class: "checkbox"%>
+      <%= error_tag f, :status %>
+      (Check if Complete)
+    </div>
+
+    <div class="form-group">
+      <%= label f, :start, class: "control-label" %>
+      <%= datetime_select f, :start, class: "form-control"%>
+      <%= error_tag f, :start %>
+    </div>
+
+    <div class="form-group">
+      <%= label f, :end, class: "control-label" %>
+      <%= datetime_select f, :end, class: "form-control"%>
+      <%= error_tag f, :end %>
+    </div>
+
+    <%= hidden_input f, :task_id, value: @task.id, class: "form-control"%>
+
+    <div class="form-group">
+      <%= submit "Submit", class: "btn btn-primary" %>
+      <%= link "Cancel", to: task_path(@conn, :index) %>
+    </div>
+  <% end %>
+<% end %>

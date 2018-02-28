@@ -1,0 +1,23 @@
+<%= form_for @changeset, @action, fn f -> %>
+  <%= if @changeset.action do %>
+    <div class="alert alert-danger">
+      <p>Oops, something went wrong! Please check the errors below.</p>
+    </div>
+  <% end %>
+
+  <div class="form-group">
+    <%= label f, "Manager: ", class: "control-label" %>
+    <%= select f, :manager_id, @managers_list, class: "form-control" %>
+    <%= error_tag f, :manager_id %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, "Underling: ", class: "control-label" %>
+    <%= select f, :underling_id, @unassignedUnderlings_list, class: "form-control" %>
+    <%= error_tag f, :underling_id %>
+  </div>
+
+  <div class="form-group">
+    <%= submit "Submit", class: "btn btn-primary" %>
+  </div>
+<% end %>

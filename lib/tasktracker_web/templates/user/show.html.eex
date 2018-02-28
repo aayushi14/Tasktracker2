@@ -1,0 +1,55 @@
+<h2>User Profile</h2>
+
+<ul>
+
+  <li>
+    <strong>Id:</strong>
+    <%= @user.id %>
+  </li>
+
+  <li>
+    <strong>Email:</strong>
+    <%= @user.email %>
+  </li>
+
+  <li>
+    <strong>Name:</strong>
+    <%= @user.name %>
+  </li>
+
+  <li>
+    <strong>Manager:</strong>
+    <%= if(@user.isManager == true) do %>
+        Yes
+    <% else %> No
+    <% end %>
+  </li>
+
+  <li>
+    <strong>Your manager: </strong>
+    <%= if (Enum.member?(@assignedUnderlingIds_list, @user.id)) do %>
+      <%= @manager %>
+    <% else %>
+      You do not have a Manager! Congrats :D
+    <% end %>
+  </li>
+
+  <li>
+    <strong>You manage: </strong>
+    <%= if (Enum.member?(@managerIds_list, @user.id)) do %>
+      <ul>
+        <%= for underling <- @underlings do %>
+        <li>  <%= underling %> </li>
+        <% end %>
+      </ul>
+    <% else %>
+      You do not Manage anyone! That's fine, you will some day. :p
+    <% end %>
+  </li>
+
+</ul>
+
+<div class="topnav">
+  <span><%= link "Edit", to: user_path(@conn, :edit, @user) %></span>
+  <span><%= link "Back", to: user_path(@conn, :index) %></span>
+</div>

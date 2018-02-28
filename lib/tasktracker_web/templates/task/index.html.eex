@@ -1,0 +1,58 @@
+<h2>List of all Tasks</h2>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Title</th>
+      <th>Description</th>
+      <th>Assigned by</th>
+      <th>Assigned to</th>
+      <th>Status</th>
+      <th>Time taken</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <%= for task <- @tasks do %>
+    <tr>
+      <td><%= task.id %></td>
+      <td><%= task.title %></td>
+      <td><%= task.description %></td>
+      <td><%= task.assignedBy.name %></td>
+      <td><%= task.assignedTo.name %></td>
+      <td><%= if (task.status) do %>
+            Complete
+          <% else %>
+            Not Complete
+          <% end %>
+      </td>
+      <td><% timeblock = Tasktracker.Jobs.getTaskTime(task.id) %>
+      <%= task.time_taken %>
+      </td>
+
+      <td>
+        <button class="time-button btn btn-default" data-task-id="<%= task.id %>">
+        Start
+        </button>
+      </td>
+
+      <td class="text-right">
+        <%= if (task.assignedTo.name == @current_user.name || task.assignedBy.name == @current_user.name) do %>
+          <span><%= link "Show", to: task_path(@conn, :show, task), class: "btn btn-default btn-xs" %></span>
+          <span><%= link "Edit", to: task_path(@conn, :edit, task), class: "btn btn-default btn-xs" %></span>
+          <span><%= link "Delete", to: task_path(@conn, :delete, task), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
+        <%= end %>
+      </td>
+
+    </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= if (Enum.member?(@managerIds_list, @current_user.id)) do %>
+  <div class="topnav">
+    <span><%= link "New Task", to: task_path(@conn, :new) %></span>
+  </div>
+<% end %>
